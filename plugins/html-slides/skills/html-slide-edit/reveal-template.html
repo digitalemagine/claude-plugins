@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deck title</title>
+<!--
+  reveal.js deck. One <section> per slide; <aside class="notes"> holds speaker notes.
+  Present: S opens the speaker view (notes, timer, next slide). F fullscreen. Esc overview.
+  PDF: open with ?print-pdf in Chrome, then Print > Save as PDF (margins none, backgrounds on).
+  Edit: open with ?edit (slide-edit). Paste "Copy changes" into Claude Code. No Download:
+  reveal rewrites the DOM at runtime, so a re-serialised page is not a usable source.
+  Needs network for reveal.js (cdnjs, pinned 5.1.0).
+-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.min.css">
+<style>
+/* ── theme: paste the chosen theme file here, unchanged ── */
+
+/* ── map the theme tokens onto reveal.js ── */
+:root{
+  --r-background-color:var(--bg); --r-main-color:var(--ink); --r-heading-color:var(--ink);
+  --r-link-color:var(--primary); --r-link-color-hover:var(--accent);
+  --r-selection-background-color:var(--accent-soft);
+  --r-main-font:var(--font-body); --r-heading-font:var(--font-display); --r-code-font:var(--font-mono);
+  --r-heading-text-transform:none; --r-heading-font-weight:700;
+}
+.reveal .slide-number{background:transparent;color:var(--faint)}
+.reveal .controls{color:var(--accent)}
+.reveal .progress{color:var(--primary)}
+
+/* ── deck-specific styles: use only the theme tokens, never raw colours ── */
+</style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <section>
+      <h1>Title</h1>
+      <p>Subtitle</p>
+      <aside class="notes">Speaker notes for this slide.</aside>
+    </section>
+
+    <section>
+      <h2>Second slide</h2>
+      <ul>
+        <li>Point one</li>
+        <li class="fragment">Revealed on the next key press</li>
+      </ul>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script>
+Reveal.initialize({ hash: true, plugins: [RevealNotes] });
+</script>
+
+<!-- slide-edit: replace this comment with a script element carrying
+     data-roots=".reveal .slides section:not(:has(section))" data-file="<file name>" data-download="off"
+     and the inlined body of slide-edit.js. -->
+</body>
+</html>

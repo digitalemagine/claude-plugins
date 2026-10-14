@@ -1,0 +1,32 @@
+/* theme: light (marine and brass on warm grey) — html-slide-edit
+   Follows the OS dark mode;
+   force with data-theme="light" or "dark" on <html>.
+   Fonts: Archivo / IBM Plex Sans / IBM Plex Mono. Add this to <head> for them
+   (optional, the fallbacks take over offline):
+   https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap */
+:root{
+  --bg:#E7E9E5; --surface:#F2F4F0; --surface-2:#E9ECE7;
+  --ink:#101619; --muted:#4E5B5E; --faint:#7C8A8C;
+  --line:#C6CCC4; --line-soft:#D6DBD3;
+  --primary:#1A3B4F; --accent:#8A6410; --accent-soft:#B89341;
+  --good:#2C6349; --warn:#8E3A2B;
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1114; --surface:#141C20; --surface-2:#1A2328;
+    --ink:#E3E8E6; --muted:#9DABAD; --faint:#6E7D80;
+    --line:#263136; --line-soft:#1E272C;
+    --primary:#8FBBD4; --accent:#DDB65C; --accent-soft:#8A6F33;
+    --good:#7CC79E; --warn:#E89178;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1114; --surface:#141C20; --surface-2:#1A2328;
+  --ink:#E3E8E6; --muted:#9DABAD; --faint:#6E7D80;
+  --line:#263136; --line-soft:#1E272C;
+  --primary:#8FBBD4; --accent:#DDB65C; --accent-soft:#8A6F33;
+  --good:#7CC79E; --warn:#E89178;
+}

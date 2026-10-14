@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Deck title</title>
+<!--
+  Responsive deck (html-slide-edit, default engine). Self-contained, no build step.
+  One <section class="slide"> per slide. Keys: arrows, space, PageUp/Down, Home/End.
+  The URL keeps the slide number (#4). Sizes are in cqw (1% of the 16:9 stage), so the
+  layout scales with the window; below 760px the slides stack into one scrolling page.
+  Edit: open with ?edit (slide-edit). Paste "Copy changes" into Claude Code.
+  Add a slide: copy a <section class="slide">, add its name to LABELS in the script.
+-->
+<style>
+/* ── theme: paste the chosen theme file here, unchanged ── */
+
+/* ── scale ── */
+:root{
+  --t-eyebrow:1.15cqw; --t-title:4.1cqw; --t-lead:2.05cqw; --t-body:1.5cqw; --t-small:1.2cqw;
+  --pad-x:5.2cqw; --pad-y:4.4cqw; --gap:1.9cqw; --chrome:96px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+
+/* ── frame ── */
+.app{height:100%;display:flex;flex-direction:column}
+.stage-wrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:14px 16px;overflow:hidden}
+.stage{
+  container-type:inline-size;position:relative;
+  width:min(100%, calc((100dvh - var(--chrome)) * 16 / 9));
+  aspect-ratio:16/9;background:var(--surface);border:1px solid var(--line);overflow:hidden;
+}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;gap:var(--gap);padding:var(--pad-y) var(--pad-x);overflow:auto}
+.slide.is-active{display:flex}
+
+/* ── type ── */
+.eyebrow{font-family:var(--font-mono);font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+h1,h2{font-family:var(--font-display);margin:0;line-height:1.05;letter-spacing:-.015em;text-wrap:balance}
+h1{font-size:var(--t-title)}
+h2{font-size:var(--t-lead)}
+p,li{font-size:var(--t-body);line-height:1.5;margin:0}
+.lead{font-size:var(--t-lead);color:var(--muted);max-width:56ch}
+
+/* ── nav ── */
+.navbar{display:flex;align-items:center;gap:1rem;padding:.55rem 16px;border-top:1px solid var(--line)}
+.arrows{display:flex;gap:.4rem}
+.arrows button{font:.7rem/1 var(--font-mono);background:none;border:1px solid var(--line);color:var(--muted);padding:.42rem .62rem;cursor:pointer}
+.arrows button:disabled{opacity:.35;cursor:default}
+.dots{display:flex;gap:.34rem;flex-wrap:wrap}
+.dot{width:1.45rem;height:3px;background:var(--line);border:0;padding:0;cursor:pointer}
+.dot[aria-current="true"]{background:var(--primary)}
+.count{margin-left:auto;font:.66rem var(--font-mono);letter-spacing:.14em;color:var(--faint)}
+
+/* ── phone: stack every slide ── */
+@media (max-width:760px){
+  :root{--t-eyebrow:.62rem;--t-title:1.55rem;--t-lead:1.02rem;--t-body:.9rem;--t-small:.82rem;--pad-x:16px;--pad-y:22px;--gap:.9rem}
+  .app{height:auto}
+  .stage-wrap{display:block;overflow:visible;padding:0}
+  .stage{container-type:normal;width:100%;aspect-ratio:auto;border:0}
+  .slide{position:static;display:flex!important;overflow:visible;border-bottom:1px solid var(--line)}
+  .navbar{display:none}
+}
+
+/* ── deck-specific styles: use only the theme tokens, never raw colours ── */
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="stage-wrap">
+    <div class="stage">
+
+      <section class="slide is-active" aria-label="Cover">
+        <div class="eyebrow">Eyebrow</div>
+        <h1>Title</h1>
+        <p class="lead">Subtitle.</p>
+      </section>
+
+      <section class="slide" aria-label="Second">
+        <h1>Second slide</h1>
+        <ul><li>Point one</li><li>Point two</li></ul>
+      </section>
+
+    </div>
+  </main>
+  <nav class="navbar" aria-label="Slides">
+    <div class="arrows">
+      <button type="button" id="prev" aria-label="Previous slide">◀</button>
+      <button type="button" id="next" aria-label="Next slide">▶</button>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="count" id="count">01 / 02</div>
+  </nav>
+</div>
+
+<script>
+(function () {
+  // Slide labels for the dot rail, in the same order as the <section> blocks.
+  var LABELS = ['Cover', 'Second'];
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dotsEl = document.getElementById('dots'), countEl = document.getElementById('count');
+  var prevEl = document.getElementById('prev'), nextEl = document.getElementById('next');
+  var i = 0;
+  dotsEl.innerHTML = '';
+  slides.forEach(function (s, n) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'dot';
+    b.setAttribute('aria-label', 'Slide ' + (n + 1) + ': ' + (LABELS[n] || ''));
+    b.addEventListener('click', function () { go(n); });
+    dotsEl.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsEl.children);
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function go(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); });
+    dots.forEach(function (d, k) { d.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+    countEl.textContent = pad(i + 1) + ' / ' + pad(slides.length);
+    prevEl.disabled = i === 0;
+    nextEl.disabled = i === slides.length - 1;
+    try { history.replaceState(null, '', location.search + '#' + (i + 1)); } catch (e) {}
+  }
+  prevEl.addEventListener('click', function () { go(i - 1); });
+  nextEl.addEventListener('click', function () { go(i + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+  // slide-edit Download hook: undo runtime state in the serialised copy.
+  document.addEventListener('slide-edit:serialise', function (e) {
+    var root = e.detail.root;
+    root.querySelector('#dots').innerHTML = '';
+    root.querySelector('#count').textContent = '01 / ' + pad(slides.length);
+    root.querySelectorAll('.slide').forEach(function (s, k) { s.classList.toggle('is-active', k === 0); });
+    ['#prev', '#next'].forEach(function (id) { root.querySelector(id).removeAttribute('disabled'); });
+  });
+  var start = parseInt((location.hash || '').replace('#', ''), 10);
+  go(isNaN(start) ? 0 : start - 1);
+})();
+</script>
+
+<!-- slide-edit: replace this comment with a script element carrying
+     data-roots=".slide" data-file="<file name>"
+     and the inlined body of slide-edit.js. -->
+</body>
+</html>

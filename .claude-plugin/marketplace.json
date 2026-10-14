@@ -1,0 +1,16 @@
+{
+  "name": "digitalemagine",
+  "owner": {
+    "name": "digitalemagine"
+  },
+  "metadata": {
+    "description": "General-purpose Claude Code plugins by digitalemagine. No organisation-specific content."
+  },
+  "plugins": [
+    {
+      "name": "html-slides",
+      "source": "./plugins/html-slides",
+      "description": "Local HTML slide decks: engine and theme choice, templates, and in-browser editing that round-trips to the source."
+    }
+  ]
+}

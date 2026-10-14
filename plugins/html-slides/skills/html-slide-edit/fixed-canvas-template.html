@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deck title</title>
+<!--
+  Fixed-canvas deck (html-slide-edit). Self-contained deck.css / deck.js-style
+  engine: a 1920x1080
+  canvas scaled to fit the window. Lay out in px, or cqw/cqh (1% of the canvas);
+  never vw/vh. Keys: arrows, space, PageUp/Down, Home/End; click the left/right half;
+  swipe. Not for phones: the canvas shrinks rather than reflows.
+  In a project that has its own deck.css / deck.js, link those instead.
+  Edit: open with ?edit (slide-edit). Paste "Copy changes" into Claude Code.
+-->
+<style>
+/* ── theme: paste the chosen theme file here, unchanged ── */
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);overflow:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── fixed canvas ── */
+.deck{
+  position:fixed;left:50%;top:50%;width:1920px;height:1080px;
+  transform:translate(-50%,-50%) scale(var(--scale,1));transform-origin:center center;
+  container-type:size;overflow:hidden;
+}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;gap:24px;padding:44px 60px 54px}
+.slide.active{display:flex}
+
+/* ── type ── */
+h1{font-family:var(--font-display);font-size:64px;font-weight:800;letter-spacing:-.5px}
+h2{font-family:var(--font-display);font-size:34px;font-weight:750;letter-spacing:-.3px}
+p,li{font-size:22px;line-height:1.45}
+.sub{color:var(--muted);font-size:20px}
+
+/* ── fixed chrome (outside .deck, unscaled) ── */
+.bar-progress{position:fixed;left:0;top:0;height:4px;background:var(--accent);width:0;z-index:10;transition:width .3s ease}
+.pager{position:fixed;right:18px;bottom:14px;color:var(--faint);font-size:13px;z-index:10}
+.tag{position:fixed;left:18px;bottom:14px;color:var(--faint);font-size:13px;z-index:10}
+
+/* ── deck-specific styles: use only the theme tokens, never raw colours ── */
+</style>
+</head>
+<body>
+<div class="bar-progress"></div>
+<div class="deck">
+
+  <section class="slide active">
+    <h1>Title</h1>
+    <p class="sub">Subtitle</p>
+  </section>
+
+  <section class="slide">
+    <h2>Second slide</h2>
+    <ul><li>Point one</li><li>Point two</li></ul>
+  </section>
+
+</div>
+<div class="tag">Deck name</div>
+<div class="pager"></div>
+
+<script>
+(function () {
+  var deck = document.querySelector('.deck');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var barEl = document.querySelector('.bar-progress'), pager = document.querySelector('.pager');
+  var cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function (s, k) { s.classList.toggle('active', k === cur); });
+    if (barEl) barEl.style.width = ((cur + 1) / slides.length * 100) + '%';
+    if (pager) pager.textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  function fit() { deck.style.setProperty('--scale', Math.min(innerWidth / 1920, innerHeight / 1080)); }
+  addEventListener('resize', fit);
+  if (slides.length > 1) {
+    addEventListener('keydown', function (e) {
+      if (['ArrowRight', 'PageDown', ' '].indexOf(e.key) >= 0) show(cur + 1);
+      else if (['ArrowLeft', 'PageUp'].indexOf(e.key) >= 0) show(cur - 1);
+      else if (e.key === 'Home') show(0);
+      else if (e.key === 'End') show(slides.length - 1);
+    });
+    addEventListener('click', function (e) {
+      if (e.target.closest('a')) return;      // let links out work
+      show(e.clientX > innerWidth / 2 ? cur + 1 : cur - 1);
+    });
+    var tx = null;
+    addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; });
+    addEventListener('touchend', function (e) {
+      if (tx === null) return;
+      var dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 40) show(dx < 0 ? cur + 1 : cur - 1);
+      tx = null;
+    });
+  }
+  // slide-edit Download hook: undo runtime state in the serialised copy.
+  document.addEventListener('slide-edit:serialise', function (e) {
+    var root = e.detail.root;
+    root.querySelectorAll('.slide').forEach(function (s, k) { s.classList.toggle('active', k === 0); });
+    root.querySelector('.deck').removeAttribute('style');
+    root.querySelector('.bar-progress').removeAttribute('style');
+    root.querySelector('.pager').textContent = '';
+  });
+  fit();
+  show(0);
+})();
+</script>
+
+<!-- slide-edit: replace this comment with a script element carrying
+     data-roots=".slide" data-file="<file name>"
+     and the inlined body of slide-edit.js. -->
+</body>
+</html>

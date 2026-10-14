@@ -1,0 +1,8 @@
+{
+  "name": "html-slides",
+  "version": "0.2.0",
+  "description": "Local HTML slide decks: picks the engine (responsive, fixed canvas, reveal.js) and a token-based theme (built-in light, or any installed theme pack), asks when ambiguous, and adds an edit mode (?edit) whose changes Claude applies back to the source.",
+  "author": {
+    "name": "Stefano Crosta"
+  }
+}
