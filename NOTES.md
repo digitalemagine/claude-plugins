@@ -7,6 +7,7 @@ Usage is in `README.md`.
 
 - Published as `digitalemagine/claude-plugins`, marketplace name `digitalemagine`.
 - Plugin author is a name only; no company email anywhere in the repo.
+- Tagged `html-slides--v0.2.0`. Installs verified from GitHub (14 Oct).
 - At least one private organisation marketplace depends on `html-slides` here, through a
   theme pack (cross-marketplace dependency).
 
@@ -61,7 +62,6 @@ from `<plugin>--v<version>` tags.
 
 ## Open
 
-1. Tag `html-slides--v0.2.0` after the first push.
-2. Possible "Apply to file…" button in the edit toolbar (File System Access API), not built.
-3. Possibly a second generic theme (e.g. plain dark) so the plugin is not single-theme
+1. Possible "Apply to file…" button in the edit toolbar (File System Access API), not built.
+2. Possibly a second generic theme (e.g. plain dark) so the plugin is not single-theme
    without a pack.
