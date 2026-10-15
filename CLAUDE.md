@@ -10,7 +10,11 @@ General-purpose Claude Code plugin marketplace `digitalemagine` (repo
 - Nothing organisation-specific here: no company names, brand themes, project names or
   machine paths, in any file (this repo is public). Those go in a private marketplace
   that depends on this one.
-- Bump the plugin's `version`, run `claude plugin validate .`, then
-  `claude plugin marketplace update digitalemagine` to test locally.
+- Development loop: installs come from the remote, so local edits are not live. Test
+  them with `claude --plugin-dir <plugin folder>` (repeatable; overrides the installed
+  copy for that session). Then bump the plugin's `version`,
+  run `claude plugin validate .`, run the checks in `tests/`, commit, push, tag with
+  `claude plugin tag --push plugins/<plugin>`, and
+  `claude plugin marketplace update digitalemagine` to pick it up.
 - Commit or push only when the maintainer asks. Commit email: see the parent folder's
   CLAUDE.md (never a company address).

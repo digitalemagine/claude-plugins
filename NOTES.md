@@ -52,6 +52,9 @@ from `<plugin>--v<version>` tags.
 
 ## Tested
 
+How to re-run: `tests/README.md` (test deck builder + manual checklist, engine/theme check).
+
+
 - Edit mode in Chrome on all three engines: off without `?edit`; navigation keys, clicks
   and swipes blocked while editing; Esc exits; change set correct; Download free of edit
   UI and runtime state; toolbar drag, persistence, double-click reset, clamping.
