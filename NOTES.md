@@ -3,24 +3,14 @@
 Why the plugins are built the way they are, what has been tested, and what is open.
 Usage is in `README.md`.
 
-## Status (14 Oct 2026)
+## Status
 
 - Published as `digitalemagine/claude-plugins`, marketplace name `digitalemagine`.
 - Plugin author is a name only; no company email anywhere in the repo.
-- Tagged `html-slides--v0.2.0`. Installs verified from GitHub (14 Oct).
-- At least one private organisation marketplace depends on `html-slides` here, through a
-  theme pack (cross-marketplace dependency).
-
-## History
-
-- **`html-slides` 0.1.0, 13 Oct.** Edit mode extracted from a project deck into a
-  reusable `slide-edit.js` (off unless `?edit`, draggable toolbar, "Copy changes" change
-  set). Three engine templates. Two themes.
-- **`html-slides` 0.2.0, 13 Oct.** Made generic: the organisation brand theme moved to
-  that organisation's own theme pack. Theme-pack discovery added. Templates say "paste
-  the chosen theme file".
-- **14 Oct.** Moved into this repo, unchanged, starting without the earlier history.
-  Marketplace first named `common-plugins`, then `digitalemagine`.
+- Tagged `html-slides--v0.2.0`. Installs verified from GitHub.
+- At least one private organisation marketplace re-lists `html-slides` (`git-subdir`
+  source pinned to a release tag) next to its theme pack, so its users add one
+  marketplace. Release tags are therefore a contract: never move one after release.
 
 ## Decisions
 

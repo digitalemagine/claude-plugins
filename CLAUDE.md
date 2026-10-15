@@ -5,7 +5,8 @@ General-purpose Claude Code plugin marketplace `digitalemagine` (repo
 `html-slides`.
 
 - Read `NOTES.md` first: design decisions, tests, status, open items. Update it whenever
-  a decision, version or status changes.
+  a decision, version or status changes. Keep it to current status, instructions and
+  rationale: no change history.
 - `README.md` is for users (install, plugin list, maintenance rules).
 - Nothing organisation-specific here: no company names, brand themes, project names or
   machine paths, in any file (this repo is public). Those go in a private marketplace
