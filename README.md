@@ -2,9 +2,17 @@
 
 GitHub: `digitalemagine/claude-plugins`. Marketplace name: `digitalemagine`.
 
-General-purpose Claude Code plugins. No organisation-specific content, so this repo can
-be published on its own. Organisation-specific add-ons (themes, rules) live in their own
-private marketplaces and depend on plugins here.
+General-purpose Claude Code plugins, made for my own work and shared for anyone to use.
+
+## Make them yours
+
+Want your company's look or house rules on top? No need to fork. Create your own
+marketplace (private if you like) with a small plugin that depends on one here and adds
+only what is specific to you. Point it at a release tag (`<plugin>--v<version>`) so you
+choose when to take updates. For example:
+
+- `html-slides`: ship a theme pack with your brand's colours and fonts (see *Theme packs*
+  under Maintaining). Your themes are then offered next to the built-in `light` one.
 
 ## Install
 
