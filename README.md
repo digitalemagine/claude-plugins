@@ -11,6 +11,7 @@ private marketplaces and depend on plugins here.
 ```
 /plugin marketplace add digitalemagine/claude-plugins
 /plugin install html-slides@digitalemagine
+/plugin install personal-desk@digitalemagine
 ```
 
 Update after changes are pushed: `/plugin marketplace update digitalemagine`, then
@@ -21,6 +22,7 @@ Update after changes are pushed: `/plugin marketplace update digitalemagine`, th
 | Plugin | What it does |
 |---|---|
 | `html-slides` | Local HTML decks. Chooses the engine (responsive / fixed canvas / reveal.js) and a token-based theme (built-in `light`, plus any installed theme pack), asking when ambiguous. Adds an edit mode (`?edit`): edit in the browser, "Copy changes", paste into Claude Code, which applies the edits to the source. |
+| `personal-desk` | A private claude.ai page with its own database for tasks, ideas and priorities that live outside the team tracker. Created on first use. Add or review items from any chat ("add to my desk: ..."), link items and open a Claude session on one, attach generic ticket references (Jira, Linear, GitHub... configured per desk), and sweep Jira, Slack and email for new to-dos. Needs claude.ai artifacts with the database capability. Also usable as a claude.ai account skill: upload `SKILL.md`; it fetches the page template from a release tag. |
 
 ## Maintaining
 

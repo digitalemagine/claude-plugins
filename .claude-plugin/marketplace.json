@@ -11,6 +11,11 @@
       "name": "html-slides",
       "source": "./plugins/html-slides",
       "description": "Local HTML slide decks: engine and theme choice, templates, and in-browser editing that round-trips to the source."
+    },
+    {
+      "name": "personal-desk",
+      "source": "./plugins/personal-desk",
+      "description": "Personal tracker for tasks, ideas and priorities outside the team tracker: a private claude.ai page with its own database, fed from any chat."
     }
   ]
 }

@@ -8,6 +8,8 @@ Usage is in `README.md`.
 - Published as `digitalemagine/claude-plugins`, marketplace name `digitalemagine`.
 - Plugin author is a name only; no company email anywhere in the repo.
 - Tagged `html-slides--v0.2.0`. Installs verified from GitHub.
+- `personal-desk` 0.1.0 (page template_version 2): not yet tagged. Its SKILL.md pins the
+  template URL to tag `personal-desk--v0.1.0` with a sha256, so tag exactly that commit.
 - At least one private organisation marketplace re-lists `html-slides` (`git-subdir`
   source pinned to a release tag) next to its theme pack, so its users add one
   marketplace. Release tags are therefore a contract: never move one after release.
@@ -40,6 +42,23 @@ discovery by description proves unreliable.
 private repo. Plugin count is not a reason to split further; independent versions come
 from `<plugin>--v<version>` tags.
 
+**personal-desk: page as a template file, copied not retyped.** The page is about 25 KB
+of HTML. Embedded in SKILL.md it would load on every desk call and Claude would have to
+reproduce it verbatim to create a desk, where a single dropped character breaks the page
+silently. So it is a separate file, copied with a command and checked against the sha256
+in SKILL.md. Sources in order: the skill folder (plugin install), the pinned release URL
+(claude.ai account skills hold only SKILL.md), an existing desk of the user's (last
+resort, with consent).
+
+**personal-desk: settings in the desk's database, not the page.** `meta/config` holds the
+page URL, title and reference systems, so one template serves every desk and user, and
+renaming or adding a ticket system needs no republish. Bump `template_version` on any
+template change and give migration steps in SKILL.md.
+
+**personal-desk: generic refs.** Items carry `refs` (keys or links); each desk configures
+ordered reference systems (pattern, link template, upper). Notes are matched
+case-sensitively so prose is not linkified; input refs of `upper` systems are uppercased.
+
 ## Tested
 
 How to re-run: `tests/README.md` (test deck builder + manual checklist, engine/theme check).
@@ -53,8 +72,14 @@ How to re-run: `tests/README.md` (test deck builder + manual checklist, engine/t
   pack was invoked every time; formal/customer requests got the pack theme, internal
   working documents got `light`, and mixed-audience requests produced a question.
 
+- personal-desk: template script syntax; ref parsing and linking on sample inputs (Jira,
+  GitHub with groups, plain links, unknown keys, invalid regex skipped, legacy `jira`
+  field and `jira_site` config); migration of one live desk from template 1 to 2 and its
+  data. Not yet: creating a fresh desk end to end; plugin install via `/plugin install`.
+
 ## Open
 
 1. Possible "Apply to file…" button in the edit toolbar (File System Access API), not built.
 2. Possibly a second generic theme (e.g. plain dark) so the plugin is not single-theme
    without a pack.
+3. personal-desk: run desk creation end to end (fresh desk, then delete it) before tagging.

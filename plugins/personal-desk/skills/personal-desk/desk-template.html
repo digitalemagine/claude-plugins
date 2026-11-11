@@ -1,0 +1,416 @@
+<title>__DESK_TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single working column; capture bar on top, filter rail, then a dense ranked list grouped by priority. */
+:root{
+  --bg:#f3f4f6; --surface:#ffffff; --line:#d9dde4; --fg:#1b2230; --muted:#5d6676;
+  --accent:#c2700a; --accent-fg:#ffffff;
+  --p1:#c23b2e; --p2:#c2700a; --p3:#2f6db3; --p4:#7a8494; --ok:#2e8a57;
+  --f-display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12161d; --surface:#1a2029; --line:#2c3440; --fg:#e4e8ee; --muted:#95a0b0;
+  --accent:#e8952e; --accent-fg:#1a1205;
+  --p1:#ec6a5c; --p2:#e8952e; --p3:#6aa2e6; --p4:#8c96a6; --ok:#55b880; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161d; --surface:#1a2029; --line:#2c3440; --fg:#e4e8ee; --muted:#95a0b0;
+  --accent:#e8952e; --accent-fg:#1a1205;
+  --p1:#ec6a5c; --p2:#e8952e; --p3:#6aa2e6; --p4:#8c96a6; --ok:#55b880; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--f-display);font-weight:700;font-size:28px;letter-spacing:.01em;margin:0;text-wrap:balance}
+.counts{font-family:var(--f-mono);font-size:12px;color:var(--muted);display:flex;gap:14px;font-variant-numeric:tabular-nums}
+.counts b{color:var(--fg);font-weight:500}
+.status{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+form.add{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;display:grid;
+  grid-template-columns:1fr auto;gap:8px}
+form.add .row{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+input,select,textarea,button{font:inherit;color:inherit}
+input[type=text],input[type=date],select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:7px 9px;min-width:0}
+#f-title{font-size:16px}
+textarea{width:100%;resize:vertical;min-height:60px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button{cursor:pointer;border-radius:4px;border:1px solid var(--line);background:var(--surface);padding:7px 12px}
+button.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);font-weight:600}
+button.ghost{border-color:transparent;background:transparent;color:var(--muted);padding:4px 8px}
+button.ghost:hover{color:var(--fg);background:var(--bg)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:5px 10px;font-size:13px;background:var(--surface);color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+#q{flex:1 1 160px}
+.group h2{font-family:var(--f-display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin:6px 0 6px;display:flex;align-items:center;gap:8px}
+.group h2 .dot{width:8px;height:8px;border-radius:50%}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+li.item{background:var(--surface);display:grid;grid-template-columns:22px 1fr auto;gap:10px;padding:10px 12px;align-items:start}
+li.item.done .t{text-decoration:line-through;color:var(--muted)}
+.chk{width:18px;height:18px;margin:2px 0 0;accent-color:var(--ok)}
+.main{min-width:0;display:flex;flex-direction:column;gap:4px}
+.t{font-weight:500;overflow-wrap:anywhere;cursor:pointer}
+.meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted)}
+.chip{font-family:var(--f-mono);font-size:11px;padding:1px 6px;border-radius:3px;border:1px solid var(--line);white-space:nowrap}
+.chip.type-idea{border-style:dashed}
+.chip.type-priority{border-color:var(--accent);color:var(--accent)}
+.chip.st-doing{color:var(--p3);border-color:var(--p3)}
+.chip.st-waiting{color:var(--p2);border-color:var(--p2)}
+.due{font-family:var(--f-mono);font-size:11px}
+.due.over{color:var(--p1);font-weight:500}
+.notes{font-size:13px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
+.ref{font-family:var(--f-mono);font-size:11px;padding:1px 6px;border-radius:3px;border:1px solid var(--p3);color:var(--p3);text-decoration:none;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+span.ref{border-color:var(--line);color:var(--muted)}
+.ref:hover{background:var(--p3);color:var(--surface)}
+.notes a{color:var(--p3)}
+li.item.hl{background:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+.linkbox{font-family:var(--f-mono);font-size:12px;width:100%;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:5px 8px;color:var(--fg)}
+.actions{display:flex;gap:2px}
+.sessions{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted)}
+.sessions a{color:var(--p3)}
+.work{display:flex;gap:8px;flex-wrap:wrap;padding-top:4px}
+.btnlink{display:inline-block;border-radius:4px;padding:7px 12px;background:var(--accent);color:var(--accent-fg);font-weight:600;text-decoration:none}
+.btnlink:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.edit{grid-column:2/-1;display:flex;flex-direction:column;gap:8px;padding-top:6px}
+.edit .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:6px;padding:24px;color:var(--muted);text-align:left}
+.empty b{color:var(--fg)}
+.danger{color:var(--p1)}
+footer{font-size:12px;color:var(--muted)}
+@media (max-width:520px){form.add{grid-template-columns:1fr}.counts{gap:10px}}
+@media (prefers-reduced-motion:no-preference){li.item{transition:background .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1 id="desk-title">__DESK_TITLE__</h1>
+    <div class="counts" id="counts"></div>
+  </header>
+
+  <form class="add" id="add" autocomplete="off">
+    <input type="text" id="f-title" placeholder="Drop a task, idea or priority…" aria-label="Title" required>
+    <button class="primary" type="submit">Add</button>
+    <div class="row">
+      <select id="f-type" aria-label="Type"><option value="task">Task</option><option value="idea">Idea</option><option value="priority">Priority</option></select>
+      <select id="f-prio" aria-label="Priority"><option value="1">P1 now</option><option value="2" selected>P2 soon</option><option value="3">P3 later</option><option value="4">P4 someday</option></select>
+      <input type="text" id="f-area" list="areas" placeholder="Area" aria-label="Area" style="flex:1 1 120px">
+      <input type="date" id="f-due" aria-label="Due date">
+      <input type="text" id="f-refs" placeholder="Refs: PROJ-123, links" aria-label="References" style="flex:1 1 200px">
+    </div>
+  </form>
+  <datalist id="areas"></datalist>
+
+  <div class="filters">
+    <div class="seg" id="seg-status" role="group" aria-label="Status filter">
+      <button type="button" data-v="open" aria-pressed="true">Open</button>
+      <button type="button" data-v="done" aria-pressed="false">Done</button>
+      <button type="button" data-v="all" aria-pressed="false">All</button>
+    </div>
+    <div class="seg" id="seg-type" role="group" aria-label="Type filter">
+      <button type="button" data-v="all" aria-pressed="true">All</button>
+      <button type="button" data-v="task" aria-pressed="false">Tasks</button>
+      <button type="button" data-v="idea" aria-pressed="false">Ideas</button>
+      <button type="button" data-v="priority" aria-pressed="false">Priorities</button>
+    </div>
+    <select id="f-areafilter" aria-label="Area filter"><option value="">All areas</option></select>
+    <input type="text" id="q" placeholder="Search" aria-label="Search">
+  </div>
+
+  <div id="list"><div class="empty">Connecting to your tracker…</div></div>
+  <footer><span class="status" id="status"></span></footer>
+</div>
+
+<script>
+const PRIO = {1:["P1","Now","--p1"],2:["P2","Soon","--p2"],3:["P3","Later","--p3"],4:["P4","Someday","--p4"]};
+const STATUSES = ["open","doing","waiting","done"];
+let db = null, items = [], filt = {status:"open", type:"all", area:"", q:""}, openEdit = null, confirmDel = null;
+let linkShown = null, boxVal = "", workShown = null, focusId = null, pendingFocus = false;
+let PAGE_URL = "", DESK_TITLE = document.title, SYSTEMS = [];
+const isUrl = v => /^https:\/\/[^\s"<>]+$/.test(String(v||""));
+function compileSystems(list){
+  const out = [];
+  for (const s of (Array.isArray(list) ? list : [])){
+    try {
+      if (!s || !s.pattern) continue;
+      const f = s.upper ? "i" : "";
+      out.push({name:String(s.name||"Ref"), url:String(s.url||""), upper:!!s.upper,
+        full:new RegExp("^(?:" + s.pattern + ")$", f), any:new RegExp("(?:" + s.pattern + ")(?![\\w-])", "g")});
+    } catch(e){}
+  }
+  return out;
+}
+function applyConfig(c){
+  c = c || {};
+  PAGE_URL = /^https:\/\/claude\.ai\//.test(c.page_url||"") ? String(c.page_url).replace(/#.*$/,"") : "";
+  let list = c.ref_systems;
+  const site = String(c.jira_site||"").replace(/^https?:\/\//,"").replace(/\/.*$/,"");
+  if (!Array.isArray(list) && /^[a-z0-9.-]+$/i.test(site))
+    list = [{name:"Jira", pattern:"[A-Z][A-Z0-9]{1,9}-\\d+", url:"https://" + site + "/browse/{key}", upper:true}];
+  SYSTEMS = compileSystems(list);
+  if (c.title){ DESK_TITLE = String(c.title); $("#desk-title").textContent = DESK_TITLE; }
+}
+const refSystem = r => isUrl(r) ? null : SYSTEMS.find(s => s.full.test(r));
+function refUrl(r){
+  if (isUrl(r)) return r;
+  const s = refSystem(r);
+  if (!s || !isUrl(s.url.replace(/\{(key|\d+)\}/g, "x"))) return "";
+  const m = r.match(s.full); let bad = false;
+  const u = s.url.replace(/\{(key|\d+)\}/g, (_, g) => {
+    const v = g === "key" ? m[0] : (m[+g] || "");
+    if (!/^[\w.~\/-]+$/.test(v)) bad = true;
+    return v;
+  });
+  return bad ? "" : u;
+}
+function refTag(r){
+  const u = refUrl(r), s = refSystem(r);
+  let label = r;
+  if (isUrl(r)) { try { label = new URL(r).host; } catch(e){} }
+  const tip = s ? s.name + " " + r : r;
+  return u ? `<a class="ref" href="${esc(u)}" title="${esc(tip)}" target="_blank" rel="noopener">${esc(label)}</a>`
+           : `<span class="ref" title="${esc(tip)}">${esc(label)}</span>`;
+}
+function parseRefs(str){
+  const out = [];
+  for (let t of String(str||"").split(/[\s,;]+/)){
+    if (!t) continue;
+    const s = refSystem(t);
+    if (s && s.upper) t = t.toUpperCase();
+    if (!out.includes(t)) out.push(t);
+  }
+  return out;
+}
+const refsOf = i => [...new Set([...(i.refs||[]), ...(i.jira||[])])];
+function linkify(escaped){
+  if (!SYSTEMS.length) return escaped;
+  const hits = [];
+  for (const s of SYSTEMS){
+    s.any.lastIndex = 0; let m;
+    while ((m = s.any.exec(escaped))){
+      if (!m[0]) { s.any.lastIndex++; continue; }
+      const prev = escaped[m.index - 1];
+      if (prev && /[\w-]/.test(prev)) continue;
+      hits.push([m.index, m.index + m[0].length, m[0]]);
+    }
+  }
+  hits.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
+  let out = "", pos = 0;
+  for (const [a, b, t] of hits){
+    if (a < pos) continue;
+    const u = refUrl(t);
+    out += escaped.slice(pos, a) + (u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${t}</a>` : t);
+    pos = b;
+  }
+  return out + escaped.slice(pos);
+}
+const itemUrl = id => PAGE_URL + "#" + id;
+const CHAT_URL = "https://claude.ai/new?q=";
+function workPrompt(i){ return `Working on desk item ${i.id} ("${i.title}") on ${DESK_TITLE}: ${itemUrl(i.id)}. Use the personal-desk skill to read the item from my desk and log this session on it, then let's continue.`; }
+function cliCmd(i){ return "claude '" + workPrompt(i).replace(/'/g, "'\\''") + "'"; }
+const safeUrl = u => /^https:\/\//.test(String(u||""));
+function copyOrShow(id, text, okMsg){
+  const fallback = () => {
+    linkShown = id; boxVal = text; render();
+    const box = document.getElementById("lb-"+id);
+    if (box){ box.focus(); box.select(); }
+    setStatus("Copy it from the box under the item");
+  };
+  try { navigator.clipboard.writeText(text).then(() => { linkShown = null; render(); setStatus(okMsg); }, fallback); }
+  catch(err){ fallback(); }
+}
+const $ = s => document.querySelector(s);
+const today = () => new Date().toISOString().slice(0,10);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+try { const v = localStorage.getItem("desk-filt"); if (v) Object.assign(filt, JSON.parse(v)); } catch(e){}
+function saveFilt(){ try { localStorage.setItem("desk-filt", JSON.stringify(filt)); } catch(e){} }
+function setStatus(t){ $("#status").textContent = t; }
+
+function sortKey(a,b){
+  if ((a.priority||4) !== (b.priority||4)) return (a.priority||4) - (b.priority||4);
+  const da = a.due || "9999", dbb = b.due || "9999";
+  if (da !== dbb) return da < dbb ? -1 : 1;
+  return (b.created||"") < (a.created||"") ? -1 : 1;
+}
+
+function render(){
+  const open = items.filter(i => i.status !== "done");
+  const over = open.filter(i => i.due && i.due < today()).length;
+  $("#counts").innerHTML = `<span><b>${open.length}</b> open</span><span><b>${open.filter(i=>i.priority==1).length}</b> P1</span><span><b>${over}</b> overdue</span>`;
+
+  const areas = [...new Set(items.map(i => i.area).filter(Boolean))].sort();
+  $("#areas").innerHTML = areas.map(a => `<option value="${esc(a)}">`).join("");
+  const af = $("#f-areafilter");
+  af.innerHTML = `<option value="">All areas</option>` + areas.map(a => `<option ${a===filt.area?"selected":""}>${esc(a)}</option>`).join("");
+
+  document.querySelectorAll("#seg-status button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v===filt.status));
+  document.querySelectorAll("#seg-type button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v===filt.type));
+
+  const q = filt.q.trim().toLowerCase();
+  const shown = items.filter(i =>
+    (filt.status==="all" || (filt.status==="done" ? i.status==="done" : i.status!=="done")) &&
+    (filt.type==="all" || i.type===filt.type) &&
+    (!filt.area || i.area===filt.area) &&
+    (!q || (i.title+" "+(i.notes||"")+" "+(i.area||"")+" "+refsOf(i).join(" ")).toLowerCase().includes(q))
+  ).sort(sortKey);
+
+  const list = $("#list");
+  if (!db) return;
+  if (!items.length){
+    list.innerHTML = `<div class="empty"><b>Nothing tracked yet.</b> Type in the box above, or tell Claude in any chat ("add to my desk: …") and it will land here.</div>`;
+    return;
+  }
+  if (!shown.length){ list.innerHTML = `<div class="empty">No items match these filters.</div>`; return; }
+
+  const groups = [1,2,3,4].map(p => [p, shown.filter(i => (i.priority||4)==p)]).filter(g => g[1].length);
+  list.innerHTML = groups.map(([p, arr]) => `
+    <section class="group">
+      <h2><span class="dot" style="background:var(${PRIO[p][2]})"></span>${PRIO[p][0]} · ${PRIO[p][1]} <span style="font-family:var(--f-mono);letter-spacing:0">${arr.length}</span></h2>
+      <ul>${arr.map(itemHTML).join("")}</ul>
+    </section>`).join("");
+}
+
+function itemHTML(i){
+  const overdue = i.due && i.status!=="done" && i.due < today();
+  const st = i.status && i.status!=="open" && i.status!=="done" ? `<span class="chip st-${i.status}">${i.status}</span>` : "";
+  let edit = "";
+  if (openEdit === i.id){
+    edit = `<div class="edit">
+      <input type="text" id="e-title-${i.id}" value="${esc(i.title)}" aria-label="Title">
+      <div class="row">
+        <select id="e-type-${i.id}" aria-label="Type">${["task","idea","priority"].map(t=>`<option ${t===i.type?"selected":""}>${t}</option>`).join("")}</select>
+        <select id="e-prio-${i.id}" aria-label="Priority">${[1,2,3,4].map(p=>`<option value="${p}" ${p==i.priority?"selected":""}>${PRIO[p][0]} ${PRIO[p][1].toLowerCase()}</option>`).join("")}</select>
+        <select id="e-status-${i.id}" aria-label="Status">${STATUSES.map(s=>`<option ${s===i.status?"selected":""}>${s}</option>`).join("")}</select>
+        <input type="text" id="e-area-${i.id}" list="areas" value="${esc(i.area||"")}" placeholder="Area" aria-label="Area" style="flex:1 1 110px">
+        <input type="date" id="e-due-${i.id}" value="${esc(i.due||"")}" aria-label="Due date">
+        <input type="text" id="e-refs-${i.id}" value="${esc(refsOf(i).join(", "))}" placeholder="Refs: keys, links" aria-label="References" style="flex:1 1 160px">
+      </div>
+      <textarea id="e-notes-${i.id}" placeholder="Notes, context, links" aria-label="Notes">${esc(i.notes||"")}</textarea>
+      <div class="row">
+        <button class="primary" type="button" data-act="save" data-id="${i.id}">Save</button>
+        <button type="button" data-act="cancel">Cancel</button>
+        <span style="flex:1"></span>
+        ${confirmDel===i.id
+          ? `<span class="danger" style="font-size:13px">Delete for good?</span><button type="button" class="danger" data-act="del-yes" data-id="${i.id}">Delete</button><button type="button" data-act="del-no">Keep</button>`
+          : `<button type="button" class="ghost danger" data-act="del" data-id="${i.id}">Delete</button>`}
+      </div>
+    </div>`;
+  }
+  return `<li class="item ${i.status==="done"?"done":""}${focusId===i.id?" hl":""}" id="item-${esc(i.id)}">
+    <input type="checkbox" class="chk" data-act="toggle" data-id="${i.id}" ${i.status==="done"?"checked":""} aria-label="Mark done">
+    <div class="main">
+      <div class="t" data-act="edit" data-id="${i.id}" tabindex="0">${esc(i.title)}</div>
+      <div class="meta">
+        <span class="chip type-${esc(i.type)}">${esc(i.type)}</span>${st}
+        ${i.area?`<span class="chip">${esc(i.area)}</span>`:""}
+        ${i.due?`<span class="due ${overdue?"over":""}">due ${esc(i.due)}</span>`:""}
+        ${refsOf(i).map(refTag).join("")}
+      </div>
+      ${i.notes && openEdit!==i.id ? `<div class="notes">${linkify(esc(i.notes))}</div>` : ""}
+      ${linkShown===i.id ? `<input type="text" readonly class="linkbox" id="lb-${esc(i.id)}" value="${esc(boxVal)}" aria-label="Text to copy">` : ""}
+      ${(i.sessions||[]).length ? `<div class="sessions">${i.sessions.slice(-5).reverse().map(s => `<div><span class="due">${esc(s.date||"")}</span> <span class="chip">${esc(s.surface||"chat")}</span> ${safeUrl(s.url) ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.note||"session")}</a>` : esc(s.note||"")}</div>`).join("")}</div>` : ""}
+      ${workShown===i.id ? `<div class="work"><a class="btnlink" href="${CHAT_URL}${encodeURIComponent(workPrompt(i))}" target="_blank" rel="noopener">Open in Claude</a><button type="button" data-act="cli" data-id="${i.id}">Copy Claude Code command</button></div>` : ""}
+    </div>
+    <div class="actions">
+      <button type="button" class="ghost" data-act="work" data-id="${i.id}" aria-label="Start a Claude session on this item">Work</button>
+      <button type="button" class="ghost" data-act="link" data-id="${i.id}" aria-label="Copy link to this item">Link</button>
+      <button type="button" class="ghost" data-act="edit" data-id="${i.id}" aria-label="Edit">Edit</button>
+    </div>
+    ${edit}
+  </li>`;
+}
+
+async function write(fn, okMsg){
+  try { await fn(); setStatus(okMsg + " · " + new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})); }
+  catch(e){
+    const c = e && e.code;
+    setStatus(c==="invalid_argument" ? "Only the owner can change this tracker." :
+              c==="quota_exceeded" ? "The tracker is full. Delete some done items." :
+              "Could not save. Try again in a moment.");
+  }
+}
+
+$("#add").addEventListener("submit", e => {
+  e.preventDefault();
+  if (!db) return;
+  const title = $("#f-title").value.trim(); if (!title) return;
+  const now = new Date().toISOString();
+  const doc = {title, type:$("#f-type").value, priority:+$("#f-prio").value, status:"open",
+    area:$("#f-area").value.trim(), due:$("#f-due").value || "", refs:parseRefs($("#f-refs").value), notes:"", created:now, updated:now, source:"page"};
+  write(() => db.collection("items").add(doc), "Added");
+  $("#f-title").value = ""; $("#f-due").value = ""; $("#f-refs").value = ""; $("#f-title").focus();
+});
+
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]"); if (!el) return;
+  const act = el.dataset.act, id = el.dataset.id;
+  if (act==="edit"){ openEdit = openEdit===id ? null : id; confirmDel = null; render(); return; }
+  if (act==="cancel"){ openEdit = null; confirmDel = null; render(); return; }
+  if ((act==="link" || act==="work") && !PAGE_URL){ setStatus("This desk is not fully set up yet. Ask Claude to finish setting up your desk."); return; }
+  if (act==="link"){ copyOrShow(id, itemUrl(id), "Link copied"); return; }
+  if (act==="work"){ workShown = workShown===id ? null : id; render(); return; }
+  if (act==="cli"){ const it = items.find(x => x.id===id); if (it) copyOrShow(id, cliCmd(it), "Claude Code command copied"); return; }
+  if (act==="del"){ confirmDel = id; render(); return; }
+  if (act==="del-no"){ confirmDel = null; render(); return; }
+  if (act==="del-yes"){ openEdit = null; confirmDel = null; write(() => db.doc("items/"+id).delete(), "Deleted"); return; }
+  if (act==="save"){
+    const g = k => document.getElementById(`e-${k}-${id}`).value;
+    const upd = {title:g("title").trim(), type:g("type"), priority:+g("prio"), status:g("status"),
+      area:g("area").trim(), due:g("due")||"", refs:parseRefs(g("refs")), notes:g("notes"), updated:new Date().toISOString()};
+    const cur = items.find(x => x.id===id); if (cur && Array.isArray(cur.jira) && cur.jira.length) upd.jira = [];
+    if (upd.status==="done") upd.completed = upd.updated;
+    openEdit = null; write(() => db.doc("items/"+id).update(upd), "Saved"); return;
+  }
+});
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.dataset.act==="toggle"){
+    const now = new Date().toISOString();
+    const upd = el.checked ? {status:"done", completed:now, updated:now} : {status:"open", updated:now};
+    write(() => db.doc("items/"+el.dataset.id).update(upd), el.checked ? "Marked done" : "Reopened");
+  }
+  if (el.id==="f-areafilter"){ filt.area = el.value; saveFilt(); render(); }
+});
+document.addEventListener("keydown", e => {
+  if (e.key==="Enter" && e.target.classList && e.target.classList.contains("t")){ e.preventDefault(); e.target.click(); }
+});
+$("#seg-status").addEventListener("click", e => { const b=e.target.closest("button"); if(b){filt.status=b.dataset.v; saveFilt(); render();} });
+$("#seg-type").addEventListener("click", e => { const b=e.target.closest("button"); if(b){filt.type=b.dataset.v; saveFilt(); render();} });
+$("#q").value = filt.q || "";
+$("#q").addEventListener("input", e => { filt.q = e.target.value; saveFilt(); render(); });
+
+function readHash(){
+  let h = "";
+  try { h = decodeURIComponent((location.hash || "").slice(1)); } catch(e){}
+  if (h){ focusId = h; pendingFocus = true; }
+}
+function applyFocus(){
+  if (!pendingFocus || !items.some(i => i.id===focusId)) return;
+  pendingFocus = false;
+  filt = {status:"all", type:"all", area:"", q:""}; $("#q").value = "";
+  openEdit = focusId; confirmDel = null;
+  render();
+  const el = document.getElementById("item-"+focusId);
+  if (el) el.scrollIntoView({block:"center"});
+}
+readHash();
+window.addEventListener("hashchange", () => { readHash(); applyFocus(); });
+
+render();
+(async () => {
+  db = await (window.claude?.use ? window.claude.use("db") : null);
+  if (!db){ $("#list").innerHTML = `<div class="empty">The tracker data is not available in this view. Open the page while signed in to claude.ai.</div>`; return; }
+  db.doc("meta/config").onSnapshot(s => { applyConfig(s.exists ? s.data() : {}); render(); }, () => {});
+  db.collection("items").onSnapshot(snap => {
+    items = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    if (openEdit && !items.some(i => i.id===openEdit)) openEdit = null;
+    render();
+    applyFocus();
+  }, err => { setStatus("Live updates stopped. Reload the page."); });
+})();
+</script>
