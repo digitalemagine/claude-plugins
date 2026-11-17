@@ -157,7 +157,7 @@ How to re-run: `tests/README.md` (test deck builder + manual checklist, engine/t
 - personal-desk: template script syntax; ref parsing and linking on sample inputs (Jira,
   GitHub with groups, plain links, unknown keys, invalid regex skipped, legacy `jira`
   field and `jira_site` config); migration of one live desk from template 1 to 2 and its
-  data. Not yet: creating a fresh desk end to end; plugin install via `/plugin install`.
+  data. `/plugin install personal-desk@digitalemagine` from GitHub works.
 - personal-desk preset packs, headless `claude -p` with `--plugin-dir` for the plugin and
   a test pack: asked to propose a new desk's settings, it invoked the pack, put the
   pack's Jira system first, added its sweep source and areas, kept built-in presets as
@@ -165,8 +165,14 @@ How to re-run: `tests/README.md` (test deck builder + manual checklist, engine/t
 - personal-desk template 3 page, in Chromium with a stub of the claude.ai runtime: JSON
   export holds config, sweep and items keyed by id; CSV quotes commas, quotes and
   newlines, neutralises formula cells, carries item links; `last_export` is written;
-  Export is hidden when `downloads` is unavailable. Not yet on claude.ai itself, and
-  restore is untested (it is a skill procedure, needs a real desk).
+  Export is hidden when `downloads` is unavailable.
+- personal-desk on claude.ai, throwaway desk built from template 2 (3 items, sweep
+  state, two reference systems), following SKILL.md step by step: update to template 3
+  (backup, republish with `downloads`, items identical after, version recorded);
+  restore in merge mode (deleted item back identical, newer desk edit kept, item added
+  after the backup kept) and in replace mode (desk identical to the backup). Found and
+  fixed: a restore wrote back `template_version`, `last_export` and `updated` from the
+  file; replace was ambiguous for items on both sides.
 
 - image-gen: Triggering, headless `claude -p` with the plugin loaded: fires on a precise photo
   request, a style copy and a pixel sprite; not on a bar chart from a CSV.
@@ -187,11 +193,12 @@ How to re-run: `tests/README.md` (test deck builder + manual checklist, engine/t
 1. Possible "Apply to file…" button in the edit toolbar (File System Access API), not built.
 2. Possibly a second generic theme (e.g. plain dark) so the plugin is not single-theme
    without a pack.
-3. personal-desk: run desk creation end to end (fresh desk, then delete it) before tagging.
+3. personal-desk: desk creation by the installed plugin from its own folder (the tested
+   desk was published by hand from the template, then configured as SKILL.md says).
 4. personal-desk: preset packs in a real desk creation and a real sweep (only the
    proposal step is tested).
-5. personal-desk: on a throwaway desk on claude.ai: update from template 2 to 3, the
-   page's Export buttons, "back up my desk", and a restore (merge and replace).
+5. personal-desk: the page's Export buttons on claude.ai (needs a person to click and
+   accept the save prompt).
 6. image-gen: Live API test with a key: confirm request accepted, response shape, `512px` size string.
 7. image-gen: Web-app path: reference-image upload (`file_upload`) not yet exercised; full-size
    capture without the download button not found (the 1K preview is what the relay gets).

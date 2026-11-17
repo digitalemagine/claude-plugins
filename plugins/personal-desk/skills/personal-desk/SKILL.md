@@ -228,10 +228,13 @@ Restore from a backup, or move a desk: "restore my desk from <file>".
    stop. An older one: apply the data steps under Updating to the file's contents
    before writing.
 3. Mode: **merge** (default) adds items missing from the desk and, for items on both
-   sides, keeps the one with the later `updated`; **replace** (only when asked) also
-   deletes desk items that are not in the file. `config` is restored except `kind`,
-   `page_url` and `default`, which stay the target's; `sweep` is restored only on
-   replace or when the target has none.
+   sides, keeps the one with the later `updated`; desk items not in the file stay.
+   **Replace** (only when asked) makes the desk's items exactly the file's: it
+   overwrites every item on both sides and deletes desk items not in the file.
+   `config` is restored except `kind`, `page_url`, `default`, `template_version` and
+   `last_export`, which stay the target's (they describe the page and its backups, not
+   the data); `updated` is set to now. `sweep` is restored only on replace or when the
+   target has none.
 4. Preview: counts of items to add, overwrite and delete, and which settings change.
    Ask before writing.
 5. Back up the target first, then write in `batch` calls (split a batch the server
