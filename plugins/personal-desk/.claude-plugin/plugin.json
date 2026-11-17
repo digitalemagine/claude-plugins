@@ -1,0 +1,8 @@
+{
+  "name": "personal-desk",
+  "version": "0.1.0",
+  "description": "A personal tracker for tasks, ideas and priorities outside the team tracker: a private claude.ai page with its own database, created on first use, fed from any chat, with item links, generic ticket references, per-item session trail and a sweep of Jira, Slack and email for new to-dos.",
+  "author": {
+    "name": "Stefano Crosta"
+  }
+}
