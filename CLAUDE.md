@@ -2,7 +2,7 @@
 
 General-purpose Claude Code plugin marketplace `digitalemagine` (repo
 `digitalemagine/claude-plugins`, public). Plugins: `html-slides`,
-`personal-desk`.
+`personal-desk`, `image-gen`.
 
 - Read `NOTES.md` first: design decisions, tests, status, open items. Update it whenever
   a decision, version or status changes. Keep it to current status, instructions and

@@ -1,0 +1,8 @@
+{
+  "name": "image-gen",
+  "version": "0.1.0",
+  "description": "Fine-grained image generation with structured specs: describe or reverse-engineer an image (or just its style) into a JSON spec, edit fields, and render it with Gemini, through the API with a key or the Gemini web app in Chrome without one. Every run is logged so it can be reproduced or tweaked.",
+  "author": {
+    "name": "Stefano Crosta"
+  }
+}

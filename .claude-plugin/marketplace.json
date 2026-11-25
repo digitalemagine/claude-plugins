@@ -16,6 +16,11 @@
       "name": "personal-desk",
       "source": "./plugins/personal-desk",
       "description": "Personal tracker for tasks, ideas and priorities outside the team tracker: a private claude.ai page with its own database, fed from any chat."
+    },
+    {
+      "name": "image-gen",
+      "source": "./plugins/image-gen",
+      "description": "Fine-grained image generation with Gemini through JSON specs: reverse-engineer images or styles into specs, edit fields, render via API key or the Gemini web app in Chrome, with a logged run per image."
     }
   ]
 }

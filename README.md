@@ -25,6 +25,7 @@ has one. Those that do, and what you can add:
 /plugin marketplace add digitalemagine/claude-plugins
 /plugin install html-slides@digitalemagine
 /plugin install personal-desk@digitalemagine
+/plugin install image-gen@digitalemagine
 ```
 
 Update after changes are pushed: `/plugin marketplace update digitalemagine`, then
@@ -38,6 +39,13 @@ Each plugin's README has the details: usage, extending, maintenance notes.
 |---|---|
 | [`html-slides`](plugins/html-slides/README.md) | Local HTML slide decks: picks the engine and theme, and adds an in-browser edit mode whose changes Claude applies back to the source. |
 | [`personal-desk`](plugins/personal-desk/README.md) | A private claude.ai page for your own tasks, ideas and priorities, fed from any chat and swept from Jira, Slack and email. Backup, export and restore included. |
+| [`image-gen`](plugins/image-gen/README.md) | Image generation with fine control: a request, a reference image or just its style becomes a JSON spec you can edit field by field, rendered with Gemini (API key, or the Gemini web app in Chrome without one). Includes sprite-sheet slicing for game assets. |
+
+## Examples
+
+`examples/` holds case studies of plugin runs (method and findings), for example
+`examples/image-gen/td-sprites`: a game sprite sheet from spec to sliced PNGs. They are
+not installed with the plugins; ask Claude for one by name to start from it.
 
 ## Maintaining
 

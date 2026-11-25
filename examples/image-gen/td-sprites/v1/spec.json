@@ -1,0 +1,75 @@
+{
+ "meta": {
+  "intent": "sprite sheet of 6 assets for a military tower defence game",
+  "priorities": [
+   "six separate assets on flat magenta, one per cell",
+   "same view angle, scale logic and style for all",
+   "readable chunky silhouettes",
+   "no text"
+  ],
+  "mode": "illustration"
+ },
+ "frame": {
+  "aspect": "3:2",
+  "layout": "sprite sheet, 3 columns x 2 rows, equal invisible cells"
+ },
+ "panels": [
+  {
+   "cell": "row 1, col 1",
+   "asset": "cannon tower: round armoured turret on a square sandbag-and-steel base, one thick short barrel pointing up-right, hazard stripes on the base"
+  },
+  {
+   "cell": "row 1, col 2",
+   "asset": "laser tower: compact dome turret on the same square base type, a long slim emitter barrel with cyan glowing coils and a cyan lens tip, pointing up-right"
+  },
+  {
+   "cell": "row 1, col 3",
+   "asset": "missile launcher tower: same base type, a box launcher with 2x2 missile tubes angled up-right, two red missile tips visible in the tubes"
+  },
+  {
+   "cell": "row 2, col 1",
+   "asset": "single missile projectile, horizontal pointing right, olive body, red tip, small fins, short orange-yellow exhaust flame"
+  },
+  {
+   "cell": "row 2, col 2",
+   "asset": "enemy quadcopter drone: X-frame with four rotors (motion-blurred discs), small camera pod with red lens, enemy markings in dull grey-purple instead of olive, facing left"
+  },
+  {
+   "cell": "row 2, col 3",
+   "asset": "enemy fixed-wing drone: small straight-wing UAV with a pusher propeller and V-tail, grey-purple enemy colours, red sensor dome, flying left"
+  }
+ ],
+ "style": {
+  "medium": "2D game art, hand-painted cartoon with clean vector-like shapes",
+  "palette": [
+   "#4B5D3A olive drab (main body)",
+   "#7A8B5C light olive (highlights)",
+   "#2E3326 dark gunmetal (outlines, barrels)",
+   "#C9B58A sand khaki (accents, panels)",
+   "#E8452C signal red (warning stripes, missile tips)",
+   "#3FC6FF cyan (laser energy, sensor lenses)"
+  ],
+  "line": "bold 3px dark gunmetal outline around every object, thinner inner lines for panels",
+  "shading": "two-tone cel shading, light from top-left, one hard shadow tone plus one small highlight",
+  "texture": "almost none; a few rivets, panel seams and stencil-like hazard stripes",
+  "detail_level": "low to medium: chunky readable silhouettes that read at 64-128px",
+  "proportions": "slightly chunky and toy-like: oversized barrels and bases, rounded corners",
+  "mood": "playful but military, clean and readable"
+ },
+ "asset": {
+  "view": "top-down three-quarter (camera tilted about 30 degrees from vertical), same angle for every asset",
+  "background": "perfectly flat solid #FF00FF magenta behind everything, no gradient, no ground, no cast shadows on the background",
+  "grid": "each asset centred in its own cell with generous empty margin; nothing touches or overlaps a cell edge",
+  "kind": "sprite sheet: 3 towers, 1 projectile, 2 enemies",
+  "size_px": "each asset fills about 70% of its cell",
+  "directions": 1,
+  "frames": "1 (static)"
+ },
+ "avoid": [
+  "text, labels or numbers",
+  "photorealism",
+  "ground tiles or scenery",
+  "drop shadows on the background",
+  "gradients in the background"
+ ]
+}

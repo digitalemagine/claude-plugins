@@ -1,6 +1,7 @@
 # Tests
 
-No automated suite. Two manual checks, run before tagging a release.
+Manual checks for `html-slides` (1, 2) and an offline script for `image-gen` (3),
+run before tagging a release.
 
 ## 1. Edit mode in a browser
 
@@ -36,3 +37,20 @@ question you would ask the user (as text, do not call AskUserQuestion)." \
 Expected without a theme pack: `light` always; the engine follows the request (text-led
 summary → responsive; roadmap/timeline → fixed canvas; live presenting with notes →
 reveal), and conflicting signals produce a question. With a pack: see the pack's own tests.
+
+## 3. image-gen API renderer (offline)
+
+```
+python3 tests/image-gen/test_gemini_image.py
+python3 tests/image-gen/test_mistral_and_receiver.py
+uv run --with pillow python3 tests/image-gen/test_slice_sheet.py
+```
+
+Runs `gemini_image.py` against a local mock of the Interactions API: request shape,
+headers, prompt with quotes passed intact, both documented response shapes, thought
+steps skipped, error and no-image exits, argument checks. The second file checks the
+Mistral script (both response shapes, key never sent to the storage URL) and the local
+receiver (save, name sanitising, CORS/PNA preflight, exit). No key, no network. The third
+slices the real sprite sheet in `examples/image-gen/td-sprites` and checks count,
+sizes, transparent corners and no magenta left. It does
+not prove the real API accepts the request: see NOTES.md (image-gen, Open).

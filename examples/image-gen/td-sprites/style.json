@@ -1,0 +1,18 @@
+{
+ "style": {
+  "medium": "2D game art, hand-painted cartoon with clean vector-like shapes",
+  "palette": ["#4B5D3A olive drab (main body)", "#7A8B5C light olive (highlights)", "#2E3326 dark gunmetal (outlines, barrels)", "#C9B58A sand khaki (accents, panels)", "#E8452C signal red (warning stripes, missile tips)", "#3FC6FF cyan (laser energy, sensor lenses)"],
+  "line": "bold 3px dark gunmetal outline around every object, thinner inner lines for panels",
+  "shading": "two-tone cel shading, light from top-left, one hard shadow tone plus one small highlight",
+  "texture": "almost none; a few rivets, panel seams and stencil-like hazard stripes",
+  "detail_level": "low to medium: chunky readable silhouettes that read at 64-128px",
+  "proportions": "slightly chunky and toy-like: oversized barrels and bases, rounded corners",
+  "mood": "playful but military, clean and readable"
+ },
+ "asset": {
+  "view": "top-down three-quarter (camera tilted about 30 degrees from vertical), same angle for every asset",
+  "background": "perfectly flat solid #FF00FF magenta behind everything, no gradient, no ground, no cast shadows on the background",
+  "grid": "each asset centred in its own cell with generous empty margin; nothing touches or overlaps a cell edge"
+ },
+ "avoid": ["text, labels or numbers", "photorealism", "ground tiles or scenery", "drop shadows on the background", "gradients in the background"]
+}
